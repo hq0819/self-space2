@@ -1,8 +1,8 @@
 <template>
   <div class="p-parent">
     <div class="topBar">
-      <img src="https://image.meiye.art/pic_1629274592524ImwRNnhXJ-q5l4TRutlCK?imageMogr2/thumbnail/470x/interlace/1" alt="">
-      <div><span style="font-size: 20px">创作者中心</span></div>
+      <img src="https://image.meiye.art/pic_1629252411847IQAmOH-mmKQ50dtldfmdb?imageMogr2/thumbnail/470x/interlace/1" alt="" style="margin-left: 25%">
+      <div style="display: flex;align-items: center"><span style="font-size: 20px;height: 30px">创作者中心</span></div>
     </div>
     <div class="p_container">
       <div class="side-left">
@@ -17,26 +17,30 @@
           />
       </div>
       <div class="content">
-        <CreateCenterContent>
-          <CenterInfo></CenterInfo>
-        </CreateCenterContent>
+        <component :is="changeContent()"></component>
       </div>
-
       </div>
-
-
 
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { MenuOption } from 'naive-ui'
-import { defineComponent, h, Component } from 'vue'
+import { defineComponent, h, Component as C,reactive} from 'vue'
 import { NIcon  } from 'naive-ui'
 import {Home,BarChart,Bookmarks,BuildSharp,LeafSharp} from '@vicons/ionicons5'
-import CreateCenterContent from "@/components/CreateCenterContent.vue";
 import CenterInfo from "@/views/CenterInfo.vue";
-function renderIcon (icon: Component) {
+
+const contents = reactive({
+  CenterInfo
+});
+
+function changeContent(){
+  return contents.CenterInfo
+}
+
+
+function renderIcon (icon: C) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 const menuOptions: MenuOption[] = [
