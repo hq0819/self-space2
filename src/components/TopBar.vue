@@ -1,41 +1,41 @@
 <template>
   <div class="topBar">
-    <div style="display: flex;margin-left: 340px">
-      <div>
-        <n-image
-            src="https://image.meiye.art/pic_1629252408900IhHPr-5pm_oHqWKyxb9qf?imageMogr2/thumbnail/470x/interlace/1"
-            height="60"></n-image>
-      </div>
-      <ul class="top-list">
-        <li>
-          <a href="#" style="text-decoration: none;color: inherit">
-            <div style="width: 52px;height:60px;display: flex;justify-content: center;align-items: center">首页</div>
-          </a>
-        </li>
-        <li>
-          <a href="#" style="text-decoration: none;color: inherit">
-            <div style="width: 52px;height:60px;display: flex;justify-content: center;align-items: center">沸点</div>
-          </a>
-        </li>
-        <li style="margin-left: 600px">
-          <n-input-group style="display: flex">
-            <n-input style="width: 280px;" placeholder="请搜索" name="search"/>
-            <n-button type="info" ghost>搜索</n-button>
-          </n-input-group>
+      <div style="width: 100%;display: flex;justify-content: center">
+        <div>
+          <n-image
+              src="https://image.meiye.art/pic_1629252408900IhHPr-5pm_oHqWKyxb9qf?imageMogr2/thumbnail/470x/interlace/1"
+              height="60"></n-image>
+        </div>
+        <ul class="top-list">
+          <li>
+            <a href="#" style="text-decoration: none;color: inherit">
+              <div class="me-item" style="width: 52px;height:60px;display: flex;justify-content: center;align-items: center">首页</div>
+            </a>
+          </li>
+          <li>
+            <a href="#" style="text-decoration: none;color: inherit">
+              <div class="me-item" style="width: 52px;height:60px;display: flex;justify-content: center;align-items: center">圈子</div>
+            </a>
+          </li>
+          <li style="">
+            <n-input-group style="display: flex">
+              <n-input style="width: 280px;" placeholder="请搜索" name="search"/>
+              <n-button type="info" ghost>搜索</n-button>
+            </n-input-group>
 
-        </li>
-        <li style="margin-left: 30px">
-          <n-button-group>
-            <n-button type="info" @click="toCreateCenter">创作中心</n-button>
-            <n-popover trigger="hover" raw :show-arrow="false">
-              <template #trigger>
-                <n-button type="info" class="create-info">
-                  <template #default>
-                    <div></div>
-                  </template>
-                </n-button>
-              </template>
-              <div class="info-hidden">
+          </li>
+          <li style="margin-left: 30px">
+            <n-button-group>
+              <n-button type="info" @click="toCreateCenter">创作中心</n-button>
+              <n-popover trigger="hover" raw :show-arrow="false">
+                <template #trigger>
+                  <n-button type="info" class="create-info">
+                    <template #default>
+                      <div></div>
+                    </template>
+                  </n-button>
+                </template>
+                <div class="info-hidden">
                   <ul>
                     <li>
                       <div class="hidden-item">
@@ -56,19 +56,19 @@
                       </div>
                     </li>
                   </ul>
-              </div>
-            </n-popover>
-          </n-button-group>
-          <div></div>
+                </div>
+              </n-popover>
+            </n-button-group>
+            <div></div>
 
-        </li>
-        <li style="margin-left: 30px">
-          <n-button strong secondary type="info" style="border-radius: 0">登录</n-button>
-        </li>
-        <li>
-          <n-button strong secondary type="info" style="border-radius: 0">注册</n-button>
-        </li>
-      </ul>
+          </li>
+          <li style="margin-left: 30px">
+            <n-button strong secondary type="info" style="border-radius: 0">登录</n-button>
+          </li>
+          <li>
+            <n-button strong secondary type="info" style="border-radius: 0">注册</n-button>
+          </li>
+        </ul>
     </div>
   </div>
 </template>
@@ -118,7 +118,9 @@ const toCreateCenter = function () {
   text-decoration: none;
 
 }
-
+.me-item:hover{
+  border-bottom: 2px solid dodgerblue;
+}
 
 .top-list {
   margin: 0;

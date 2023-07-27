@@ -1,13 +1,13 @@
 <template>
   <div class="p-parent">
     <div class="topBar">
-      <img src="https://image.meiye.art/pic_1629252411847IQAmOH-mmKQ50dtldfmdb?imageMogr2/thumbnail/470x/interlace/1" alt="" style="margin-left: 25%">
+      <img src="https://image.meiye.art/pic_1629252411847IQAmOH-mmKQ50dtldfmdb?imageMogr2/thumbnail/470x/interlace/1" alt="" style="margin-left: 16.5rem">
       <div style="display: flex;align-items: center"><span style="font-size: 20px;height: 30px">创作者中心</span></div>
     </div>
     <div class="p_container">
       <div class="side-left">
         <div style="width: 224px;height: 48px;text-align: center;margin-top: 15px">
-          <n-button type="info" style="width: 200px;height: 45px">写文章</n-button>
+          <n-button type="info" style="width: 200px;height: 45px" @click="toEdit">写文章</n-button>
         </div>
           <n-menu
               :options="menuOptions"
@@ -30,13 +30,18 @@ import { defineComponent, h, Component as C,reactive} from 'vue'
 import { NIcon  } from 'naive-ui'
 import {Home,BarChart,Bookmarks,BuildSharp,LeafSharp} from '@vicons/ionicons5'
 import CenterInfo from "@/views/CenterInfo.vue";
-
+import {useRouter} from 'vue-router'
+const router = useRouter();
 const contents = reactive({
   CenterInfo
 });
 
 function changeContent(){
   return contents.CenterInfo
+}
+
+function toEdit(){
+  router.push("/textEdit")
 }
 
 

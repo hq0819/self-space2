@@ -9,7 +9,6 @@
           <div class="content-header">
               <div>
               </div>
-
           </div>
           <div class="content-body">
             <div class="body-header">
@@ -19,8 +18,8 @@
             </div>
             <div class="body-list">
               <n-list hoverable clickable show-divider @click="toDetail">
-                <n-list-item v-for="article of articles" style="padding: 16px;box-sizing: border-box">
-                  <div style="width: 682px;height: 130px">
+                <n-list-item v-for="article of articles" style="padding: 8px;box-sizing: border-box">
+                  <div style="width: 682px;height: 110px">
                     <div class="item_header">
                       <n-breadcrumb separator="|">
                         <n-breadcrumb-item> {{article.author}}</n-breadcrumb-item>
@@ -29,15 +28,15 @@
                         <n-breadcrumb-item ></n-breadcrumb-item>
                       </n-breadcrumb>
                     </div>
-                    <div class="item_body" style="width: 696px;margin-top: 5px;display: flex; border-left: 5px;border-right: 5px">
-                      <div style="flex: 5;display: flex;flex-direction: column;justify-content: center">
-                        <h3>{{article.title}}</h3>
+                    <div class="item_body" style="height: 80px;width: 696px;margin-top: 3px;display: flex; border-left: 5px;border-right: 5px">
+                      <div style="flex: 5;display: flex;flex-direction: column;justify-content: center;">
+                        <h3 style="line-height:0">{{article.title}}</h3>
                         <n-ellipsis style="max-width: 490px" line-clamp="2">
                           {{ article.content }}
                         </n-ellipsis>
                       </div>
                       <div style="flex: 1;margin-right: 10px" v-if="isShow(article.picUrl)">
-                        <img :src="article.picUrl" style="width: 125px;height: 90px;background-size: cover"  />
+                        <img :src="article.picUrl" style="width: 125px;height: 80px;background-size: cover"  />
                       </div>
                     </div>
                   </div>
@@ -227,7 +226,7 @@ const toDetail = ()=>router.push("/detail")
   .side-left{
     background-color: white;
     width: 180px;
-    height: 472px;
+    height: 492px;
     position: sticky;
     top: 20px;
   }
