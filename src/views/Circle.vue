@@ -60,7 +60,7 @@
                     <n-icon :component="ShareSocialOutline" color="gray" size="25"/>
                     <div style="margin-left: 5px"><span>分享</span></div>
                   </div>
-                  <div class="trends-btn">
+                  <div class="trends-btn" @click="showComment(tu)">
                     <n-icon :component="ChatboxEllipsesOutline" color="gray" size="25"/>
                     <div style="margin-left: 5px"><span>评论</span></div>
                   </div>
@@ -68,6 +68,9 @@
                     <n-icon :component="HeartOutline" color="gray" size="25"/>
                     <div style="margin-left: 5px"><span>喜欢</span></div>
                   </div>
+                </div>
+                <div class="t-comment" v-if="tu.showFlag">
+                  1231231
                 </div>
               </template>
             </n-card>
@@ -86,8 +89,12 @@ import {Component, h,ref} from "vue";
 import {FireOutlined,StarOutlined,PictureOutlined} from '@ant-design/icons-vue'
 import V3Emoji from 'vue3-emoji'
 
-const showModal = false
-const trendUsers = [
+
+function showComment(tu){
+  tu.showFlag =  !tu.showFlag
+}
+
+const trendUsers = ref([
   {
     username:"fearless77",
     avatar:"https://image.meiye.art/pic_C_I6p1zvMvb2-56U1A9uQ?imageMogr2/thumbnail/560x/interlace/1",
@@ -96,6 +103,10 @@ const trendUsers = [
       "https://image.meiye.art/Fv8zYJQM6S3WJeMzPNQHKSA89r6J?imageMogr2/thumbnail/470x/interlace/1",
       "https://image.meiye.art/FjCI1XicLNGF-JQ9cFL9QjprOw71?imageMogr2/thumbnail/470x/interlace/1",
 
+    ],
+    showFlag: false,
+    comment:[
+      {}
     ]
   },
   {
@@ -104,9 +115,13 @@ const trendUsers = [
     content:"今天天气很好呀",
     contentPic:[
       "https://image.meiye.art/Fv8zYJQM6S3WJeMzPNQHKSA89r6J?imageMogr2/thumbnail/470x/interlace/1",
+    ],
+    showFlag: false,
+    comment:[
+      {}
     ]
   }
-]
+])
 
 function addEmoji(e){
   trends.value.content+=e
