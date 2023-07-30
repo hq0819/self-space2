@@ -48,6 +48,8 @@ import TopBar from "@/components/TopBar.vue";
   background-color: white;
   width: 260px;
   height: 600px;
+  position: sticky;
+  top: 20px;
 }
 
 </style>

@@ -17,6 +17,7 @@
     "mavon-editor": "^3.0.1",
     "vue": "^3.3.2",
     "vue-router": "^4.2.0",
+    "vue3-emoji": "^2.0.0",
     "vue3-emoji-picker": "^1.1.7"
   },
   "devDependencies": {

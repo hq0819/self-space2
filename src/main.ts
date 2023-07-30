@@ -6,8 +6,7 @@ import 'vfonts/Lato.css'
 import './assets/common.css'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-import 'vue3-emoji-picker/css'
-
+import 'vue3-emoji/dist/style.css'
 
 
 

@@ -22,6 +22,9 @@ const themeOverrides: GlobalThemeOverrides = {
     itemIconColorActive:"cornflowerblue",
     itemIconColorActiveHover:"cornflowerblue",
     itemHeight:"48px",
+  },
+  Card:{
+    paddingSmall:"5px"
   }
 }
 

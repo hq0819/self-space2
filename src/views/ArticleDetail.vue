@@ -1,6 +1,8 @@
 <template>
   <div class="parent">
-    <TopBar></TopBar>
+    <n-dialog-provider>
+      <TopBar></TopBar>
+    </n-dialog-provider>
     <div class="detail-body" style="display: flex;justify-content: center" >
       <div class="detail-content" style="width: 820px;height: 900px;background-color: white;padding: 20px;box-sizing: border-box">
         <div >
