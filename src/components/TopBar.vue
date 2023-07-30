@@ -8,14 +8,14 @@
         </div>
         <ul class="top-list">
           <li>
-            <a href="#" style="text-decoration: none;color: inherit">
+            <router-link to="/" style="text-decoration: none;color: inherit">
               <div class="me-item" style="width: 52px;height:60px;display: flex;justify-content: center;align-items: center">首页</div>
-            </a>
+            </router-link>
           </li>
           <li>
-            <a href="#" style="text-decoration: none;color: inherit">
+            <router-link to="/circle" style="text-decoration: none;color: inherit">
               <div class="me-item" style="width: 52px;height:60px;display: flex;justify-content: center;align-items: center">圈子</div>
-            </a>
+            </router-link>
           </li>
           <li style="">
             <n-input-group style="display: flex">
@@ -63,10 +63,7 @@
 
           </li>
           <li style="margin-left: 30px">
-            <n-button strong secondary type="info" style="border-radius: 0">登录</n-button>
-          </li>
-          <li>
-            <n-button strong secondary type="info" style="border-radius: 0">注册</n-button>
+            <n-button strong secondary type="info" style="border-radius: 0" @click="login">登录 | 注册</n-button>
           </li>
         </ul>
     </div>
@@ -75,6 +72,25 @@
 
 <script lang="ts" setup>
 import {useRouter} from 'vue-router'
+import { useDialog } from 'naive-ui'
+import {h} from 'vue'
+import LoginForm from "@/components/LoginForm.vue";
+const dialog = useDialog();
+function login(){
+  dialog.create({
+    content:()=> h(LoginForm),
+    icon:()=>h("div"),
+    title:()=>("h3","登录个人空间享更多功能"),
+    style:{
+      width: '680px',
+      height: '480px',
+    }
+
+  }
+  )
+
+}
+
 const router = useRouter();
 const toCreateCenter = function () {
   router.push("/createCenter")

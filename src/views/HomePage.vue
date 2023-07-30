@@ -1,14 +1,23 @@
 <template>
     <div class="p-parent">
-      <TopBar></TopBar>
+      <n-dialog-provider>
+        <TopBar></TopBar>
+      </n-dialog-provider>
       <div class="p_container">
         <div class="side-left">
           <n-menu :options="menuOptions" style="box-sizing: border-box"></n-menu>
         </div>
         <div class="content">
           <div class="content-header">
-              <div>
+            <n-carousel show-arrow autoplay effect="card"
+                        prev-slide-style="transform: translateX(-100%) translateZ(-800px);"
+                        next-slide-style="transform: translateX(20%) translateZ(-800px);"
+            >
+              <div style="display: flex;justify-content: center" v-for="url of imgUrls">
+                <img class="carousel-img"  :src="url" style="height: 180px"/>
               </div>
+
+            </n-carousel>
           </div>
           <div class="content-body">
             <div class="body-header">
@@ -16,7 +25,7 @@
               <n-button quaternary size="large">最新</n-button>
               <n-select :options="options" v-model:value="value" style="width: 120px;margin-left: 440px;" show-arrow clearable/>
             </div>
-            <div class="body-list">
+            <div class="body-list" style="box-sizing: border-box;padding-left: 10px">
               <n-list hoverable clickable show-divider @click="toDetail">
                 <n-list-item v-for="article of articles" style="padding: 8px;box-sizing: border-box">
                   <div style="width: 682px;height: 110px">
@@ -53,11 +62,10 @@
             </div>
           </div>
         </div>
-        <div class="side-right" style="position: sticky;top: 20px;display: flex;flex-direction: column;align-items: center;justify-content: space-around">
-          <n-image src="https://image.meiye.art/pic_1628412272226?imageMogr2/thumbnail/470x/interlace/1" width="250"></n-image>
-          <n-image src="https://image.meiye.art/pic_1628412639248?imageMogr2/thumbnail/470x/interlace/1" width="250"></n-image>
-          <n-image src="https://image.meiye.art/pic_1632576099845vNJ2S1E6weDTx7Ti1EQ1Z?imageMogr2/thumbnail/470x/interlace/1" width="250"></n-image>
-
+        <div class="side-right" style="position: sticky;top: 20px;display: flex;flex-direction: column;align-items: center;justify-content: space-between">
+          <n-image src="https://image.meiye.art/pic_1631421521140uLoptL8qOK2vDblKAEOw1?imageMogr2/thumbnail/560x/interlace/1" width="250"></n-image>
+          <n-image src="https://image.meiye.art/pic_163142152104721MZZpUlSXvWBU2UB0mYt?imageMogr2/thumbnail/560x/interlace/1" width="250"></n-image>
+          <n-image src="https://image.meiye.art/pic_163142152112746RAhC6D8vztH5065bhqh?imageMogr2/thumbnail/560x/interlace/1" width="250"></n-image>
         </div>
       </div>
 
@@ -132,13 +140,12 @@ const articles = [
 ]
 import type { MenuOption } from 'naive-ui'
 import { h, ref, Component } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { NIcon,NButton,NSelect} from 'naive-ui'
 import TopBar from "@/components/TopBar.vue";
 import {CodeSlashOutline,MusicalNotesSharp,Tv,FunnelOutline,CafeSharp,Camera,Book,Construct,BarcodeOutline,Eye,HeartCircle,ChatboxEllipsesOutline} from '@vicons/ionicons5'
 
 const router = useRouter()
-const route = useRoute()
 function renderIcon (icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
@@ -214,6 +221,14 @@ const options  = [
   }
 ]
 const toDetail = ()=>router.push("/detail")
+
+const imgUrls = [
+  `https://image.meiye.art/pic_1631421521136iuvLk0g1Dtdd5F67jNnx6?imageMogr2/thumbnail/560x/interlace/1`,
+  `https://image.meiye.art/pic_1631421521047lg9n63mGkg4NHchbl4m5j?imageMogr2/thumbnail/560x/interlace/1`,
+  `https://image.meiye.art/pic_1631421521042p9Ynz_gHiZE3tM0pFhWap?imageMogr2/thumbnail/560x/interlace/1`,
+]
+
+
 </script>
 
 <style scoped>
@@ -248,7 +263,7 @@ const toDetail = ()=>router.push("/detail")
   }
 
   .content-header{
-    height: 150px;
+    height: 180px;
     width: 720px;
     margin-bottom: 20px;
     background-color: white;

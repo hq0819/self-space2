@@ -6,7 +6,7 @@ const themeOverrides: GlobalThemeOverrides = {
     primaryColorSuppl:"cornflowerblue",
   },
   Input:{
-    boxShadowFocus:"none"
+    boxShadowFocus:"none",
   },
   Menu:{
     itemIconColorHover:"cornflowerblue",
