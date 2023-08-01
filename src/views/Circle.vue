@@ -21,15 +21,17 @@
         <div class="text-fu">
           <div class="t-item" style="display: flex;align-items: center">
             <V3Emoji @clickEmoji="addEmoji" size="mid" :custom-size="customSize" :model-value="trends.content"
-                     fix-pos="downright" style="width: 26px" :options-name="optionsName"></V3Emoji>
-            <div style="width: 40px">表情</div>
+                     fix-pos="downright" style="width: 26px" :options-name="optionsName">
+              <div style="display: flex;align-items: center;height: 30px"><SmileOutlined style="color: brown;font-size: 20px">
+              </SmileOutlined><div style="display: flex;align-items: center;margin-left: 5px"><span style="font-size: 10px;width: 30px">表情</span></div></div>
+            </V3Emoji>
           </div>
-          <div class="t-item" style="display: flex;align-items: center">
-            <n-icon :component="PictureOutlined" color="skyblue" size="25"></n-icon>
+          <div class="t-item" style="display: flex;align-items: center;margin-left: 50px">
+            <PictureOutlined style="color: cadetblue;font-size: 20px"></PictureOutlined>
             <div style="width: 40px;margin-left: 5px">图片</div>
           </div>
 
-          <div style="margin-left: 65%" class="item">
+          <div style="margin-left: 70%" class="item">
             <n-button type="info" @click="publish">发表</n-button>
           </div>
         </div>
@@ -89,16 +91,19 @@
                 </div>
                 <div class="text-fu">
                   <div class="t-item" style="display: flex;align-items: center">
-                    <V3Emoji @clickEmoji="addCommentEmoji" size="small" :custom-size="customSize" :model-value="trends.content"
-                             fix-pos="downright" style="width: 26px" :options-name="optionsName"></V3Emoji>
-                    <div style="width: 40px">表情</div>
+                    <V3Emoji @clickEmoji="addCommentEmoji" :custom-size="customSize" :model-value="trends.content"
+                             fix-pos="downright" style="width: 26px;display: flex;align-items: center" :options-name="optionsName">
+                      <div style="display: flex;align-items: center;height: 30px"><SmileOutlined style="color: brown;font-size: 20px">
+                      </SmileOutlined><div style="display: flex;align-items: center;margin-left: 5px"><span style="font-size: 10px;width: 30px">表情</span></div></div>
+                    </V3Emoji>
+                    <div style="width: 40px"></div>
                   </div>
                   <div class="t-item" style="display: flex;align-items: center">
-                    <n-icon :component="PictureOutlined" color="skyblue" size="16px"></n-icon>
+                    <PictureOutlined style="color: cadetblue;font-size: 20px"></PictureOutlined>
                     <div style="width: 40px;margin-left: 5px">图片</div>
                   </div>
 
-                  <div style="margin-left: 65%" class="item">
+                  <div style="margin-left: 72%" class="item">
                     <n-button type="info" @click="publishComment">发表</n-button>
                   </div>
                 </div>
@@ -153,7 +158,7 @@ import {
   HeartOutline
 } from "@vicons/ionicons5";
 import {Component, h, ref} from "vue";
-import {FireOutlined, StarOutlined, PictureOutlined} from '@ant-design/icons-vue'
+import {FireOutlined, StarOutlined, PictureOutlined,SmileOutlined} from '@ant-design/icons-vue'
 import V3Emoji from 'vue3-emoji'
 import Clamp from '@/components/Clamp.vue'
 
