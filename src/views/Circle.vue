@@ -76,7 +76,7 @@
                 </div>
               </div>
               <div class="t-comment" v-show="tu.showCommentFlag" style="margin-bottom: 20px">
-                <n-card style="border:none;margin-bottom: 2px" class="sty-co" v-for="(co,index) of tu.comments" footer-style="padding-bottom:10px;" header-style="padding-bottom:8px;" content-style="padding-bottom:6px;">
+                <n-card style="border:none;margin-bottom: 2px" class="sty-co" v-for="(co,index) of tu.comments" footer-style="padding-bottom:10px;" header-style="padding-bottom:8px;padding-top:8px;" content-style="padding-bottom:6px;">
                   <template #header>
                     <div style="display: flex;align-items: center;">
                       <n-avatar
