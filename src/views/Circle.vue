@@ -90,22 +90,7 @@
                   />
                 </div>
                 <div class="text-fu">
-                  <div class="t-item" style="display: flex;align-items: center">
-                    <V3Emoji @clickEmoji="addCommentEmoji" :custom-size="customSize" :model-value="trends.content"
-                             fix-pos="downright" style="width: 26px;display: flex;align-items: center" :options-name="optionsName">
-                      <div style="display: flex;align-items: center;height: 30px"><SmileOutlined style="color: brown;font-size: 20px">
-                      </SmileOutlined><div style="display: flex;align-items: center;margin-left: 5px"><span style="font-size: 10px;width: 30px">表情</span></div></div>
-                    </V3Emoji>
-                    <div style="width: 40px"></div>
-                  </div>
-                  <div class="t-item" style="display: flex;align-items: center">
-                    <PictureOutlined style="color: cadetblue;font-size: 20px"></PictureOutlined>
-                    <div style="width: 40px;margin-left: 5px">图片</div>
-                  </div>
-
-                  <div style="margin-left: 72%" class="item">
-                    <n-button type="info" @click="publishComment">发表</n-button>
-                  </div>
+                 <TextInputer v-model:bind-content="myComment.content" :click-emoji="addCommentEmoji" :publish-click="publishMessage"></TextInputer>
                 </div>
                 <n-card style="border:none;margin-bottom: 2px" class="sty-co" v-for="(co,index) of tu.comments" footer-style="padding-bottom:10px;" header-style="padding-bottom:8px;padding-top:8px;" content-style="padding-bottom:6px;">
                   <template #header>
@@ -161,6 +146,7 @@ import {Component, h, ref} from "vue";
 import {FireOutlined, StarOutlined, PictureOutlined,SmileOutlined} from '@ant-design/icons-vue'
 import V3Emoji from 'vue3-emoji'
 import Clamp from '@/components/Clamp.vue'
+import TextInputer from '@/components/TextInputer.vue'
 
 const myComment= ref({
   content: ""
@@ -228,6 +214,9 @@ function addCommentEmoji(e){
 
 function publish() {
   console.log(trends)
+}
+function publishMessage(){
+  console.log("发布评论")
 }
 
 const optionsName = {
