@@ -30,6 +30,7 @@
     "typescript": "~5.0.4",
     "vfonts": "^0.0.3",
     "vite": "^4.3.5",
-    "vue-tsc": "^1.6.4"
+    "vue-tsc": "^1.6.4",
+    "vue-unfold": "^1.0.1"
   }
 }
