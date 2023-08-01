@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts" setup>
-import {ref,onMounted,defineProps} from 'vue'
+import {ref,onMounted} from 'vue'
 const ClampProp = defineProps({
   maxOfLine:{
     type: Number,

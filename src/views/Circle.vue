@@ -76,6 +76,32 @@
                 </div>
               </div>
               <div class="t-comment" v-show="tu.showCommentFlag" style="margin-bottom: 20px">
+                <div>
+                  <n-input
+                      v-model:value="myComment.content"
+                      type="textarea"
+                      maxlength="200"
+                      placeholder="#评论"
+                      show-count
+                      :autosize="commentArea"
+                      style="border: none;font-size: 16px"
+                  />
+                </div>
+                <div class="text-fu">
+                  <div class="t-item" style="display: flex;align-items: center">
+                    <V3Emoji @clickEmoji="addCommentEmoji" size="small" :custom-size="customSize" :model-value="trends.content"
+                             fix-pos="downright" style="width: 26px" :options-name="optionsName"></V3Emoji>
+                    <div style="width: 40px">表情</div>
+                  </div>
+                  <div class="t-item" style="display: flex;align-items: center">
+                    <n-icon :component="PictureOutlined" color="skyblue" size="16px"></n-icon>
+                    <div style="width: 40px;margin-left: 5px">图片</div>
+                  </div>
+
+                  <div style="margin-left: 65%" class="item">
+                    <n-button type="info" @click="publishComment">发表</n-button>
+                  </div>
+                </div>
                 <n-card style="border:none;margin-bottom: 2px" class="sty-co" v-for="(co,index) of tu.comments" footer-style="padding-bottom:10px;" header-style="padding-bottom:8px;padding-top:8px;" content-style="padding-bottom:6px;">
                   <template #header>
                     <div style="display: flex;align-items: center;">
@@ -131,6 +157,9 @@ import {FireOutlined, StarOutlined, PictureOutlined} from '@ant-design/icons-vue
 import V3Emoji from 'vue3-emoji'
 import Clamp from '@/components/Clamp.vue'
 
+const myComment= ref({
+  content: ""
+})
 function showComment(tu) {
   tu.showCommentFlag = !tu.showCommentFlag
 }
@@ -186,7 +215,10 @@ const trendUsers = ref([
 
 function addEmoji(e) {
   trends.value.content += e
-  console.log(e)
+}
+
+function addCommentEmoji(e){
+  myComment.value.content+=e
 }
 
 function publish() {
@@ -268,6 +300,10 @@ const trends = ref({
 const textArea = {
   minRows: 5,
   maxRows: 5,
+}
+const commentArea={
+  minRows: 1,
+  maxRows: 1,
 }
 </script>
 
