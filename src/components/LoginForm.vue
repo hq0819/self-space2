@@ -21,6 +21,15 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
 import {FormInst} from "naive-ui";
+import axios from "axios";
+const api = axios.create({
+  baseURL:"/api",
+  timeout:3000,
+  headers:{
+    'Content-Type': 'application/json;charset=UTF-8'
+  }
+
+});
 const formRef = ref<FormInst  | null>(null)
 const rules = ref({
     username:{
@@ -51,7 +60,21 @@ function login() {
   const p = formRef.value?.validate()
   p?.then(
       ()=>{
-        console.log("登录")
+        api.post(
+            "/user/login",
+            {
+              username:user.value.username,
+              password:user.value.password
+            }
+        ).then(res =>{
+          console.log(res)
+          if(res.data.code==-1){
+            console.error(res.data.message)
+          }
+          console.log(res.data)
+        }).catch( e=>{
+          console.log(e)
+        })
       }
   )
 }
