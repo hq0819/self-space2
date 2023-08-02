@@ -30,7 +30,6 @@
             <PictureOutlined style="color: cadetblue;font-size: 20px"></PictureOutlined>
             <div style="width: 40px;margin-left: 5px">图片</div>
           </div>
-
           <div style="margin-left: 70%" class="item">
             <n-button type="info" @click="publish">发表</n-button>
           </div>
@@ -78,19 +77,9 @@
                 </div>
               </div>
               <div class="t-comment" v-show="tu.showCommentFlag" style="margin-bottom: 20px">
-                <div>
-                  <n-input
-                      v-model:value="myComment.content"
-                      type="textarea"
-                      maxlength="200"
-                      placeholder="#评论"
-                      show-count
-                      :autosize="commentArea"
-                      style="border: none;font-size: 16px"
-                  />
-                </div>
+                <TextInputer @pulishComment="publishMessage" :id="index"></TextInputer>
                 <div class="text-fu">
-                 <TextInputer v-model:bind-content="myComment.content" :click-emoji="addCommentEmoji" :publish-click="publishMessage"></TextInputer>
+
                 </div>
                 <n-card style="border:none;margin-bottom: 2px" class="sty-co" v-for="(co,index) of tu.comments" footer-style="padding-bottom:10px;" header-style="padding-bottom:8px;padding-top:8px;" content-style="padding-bottom:6px;">
                   <template #header>
@@ -148,9 +137,6 @@ import V3Emoji from 'vue3-emoji'
 import Clamp from '@/components/Clamp.vue'
 import TextInputer from '@/components/TextInputer.vue'
 
-const myComment= ref({
-  content: ""
-})
 function showComment(tu) {
   tu.showCommentFlag = !tu.showCommentFlag
 }
@@ -208,15 +194,13 @@ function addEmoji(e) {
   trends.value.content += e
 }
 
-function addCommentEmoji(e){
-  myComment.value.content+=e
-}
+
 
 function publish() {
   console.log(trends)
 }
-function publishMessage(){
-  console.log("发布评论")
+function publishMessage(e,id){
+  console.log(id,e.value)
 }
 
 const optionsName = {
@@ -295,10 +279,7 @@ const textArea = {
   minRows: 5,
   maxRows: 5,
 }
-const commentArea={
-  minRows: 1,
-  maxRows: 1,
-}
+
 </script>
 
 <style scoped>
@@ -313,6 +294,11 @@ const commentArea={
 
 .trends-btn:hover {
   cursor: pointer;
+}
+.text-fu {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
 }
 
 V3Emoji:last-child {
@@ -331,10 +317,7 @@ V3Emoji:last-child {
   align-items: center;
 }
 
-.text-fu {
-  display: flex;
-  align-items: center;
-}
+
 
 .item:hover {
   color: cornflowerblue;
