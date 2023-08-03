@@ -41,7 +41,8 @@ function changeContent(){
 }
 
 function toEdit(){
-  router.push("/textEdit")
+  const resolve = router.resolve({path:"/textEdit"})
+  window.open(resolve.path,'_blank')
 }
 
 
