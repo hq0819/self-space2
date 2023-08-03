@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { NConfigProvider, GlobalThemeOverrides } from 'naive-ui'
+import {nextTick, provide, ref} from 'vue'
 const themeOverrides: GlobalThemeOverrides = {
   common: {
     primaryColorHover: 'cornflowerblue',
@@ -26,13 +27,25 @@ const themeOverrides: GlobalThemeOverrides = {
   Card:{
     paddingSmall:"5px"
   }
+
 }
+const flag = ref(true);
+function reload(){
+  flag.value = false
+  nextTick(()=>{
+    flag.value = true
+      }
+  )
+}
+provide("reload",reload)
 
 </script>
 
 <template>
   <n-config-provider :theme-overrides="themeOverrides">
-    <router-view></router-view>
+    <n-dialog-provider>
+      <router-view v-if="flag"></router-view>
+    </n-dialog-provider>
   </n-config-provider>
 
 

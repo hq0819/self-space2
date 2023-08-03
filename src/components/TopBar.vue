@@ -1,6 +1,6 @@
 <template>
   <div class="topBar">
-      <div style="width: 100%;display: flex;justify-content: center">
+      <div style="width: 100%;display: flex;justify-content: center;align-items: center">
         <div>
           <n-image
               src="https://image.meiye.art/pic_1629252408900IhHPr-5pm_oHqWKyxb9qf?imageMogr2/thumbnail/470x/interlace/1"
@@ -63,7 +63,8 @@
 
           </li>
           <li style="margin-left: 30px">
-            <n-button strong secondary type="info" style="border-radius: 0" @click="login">登录 | 注册</n-button>
+            <n-button v-if="showLogin()" strong secondary type="info" style="border-radius: 0" @click="login">登录 | 注册</n-button>
+            <n-avatar round style="width: 52px;height: 52px" v-show="!showLogin()" :src="info.avatar"/>
           </li>
         </ul>
     </div>
@@ -71,11 +72,25 @@
 </template>
 
 <script lang="ts" setup>
-import {useRouter} from 'vue-router'
+import {parseQuery, useRouter} from 'vue-router'
 import { useDialog } from 'naive-ui'
-import {h} from 'vue'
+import {h,ref,inject} from 'vue'
 import LoginForm from "@/components/LoginForm.vue";
+let info = {
+  rowId:"",
+  username:"",
+  avatar:"",
+  positionType:"",
+  createTime:""
+}
 const dialog = useDialog();
+function showLogin():boolean{
+  if(sessionStorage["userInfo"]===undefined){
+    return true
+  }
+ info = JSON.parse(sessionStorage["userInfo"])
+  return false
+}
 function login(){
   dialog.create({
     content:()=> h(LoginForm),
@@ -142,7 +157,7 @@ const toCreateCenter = function () {
   margin: 0;
   padding: 0;
   display: flex;
-  align-items: baseline;
+  align-items: center;
 }
 
 .create-info:hover div {

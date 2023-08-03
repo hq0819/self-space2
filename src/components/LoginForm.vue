@@ -19,17 +19,11 @@
 </template>
 
 <script lang="ts" setup>
-import {ref} from 'vue'
-import {FormInst} from "naive-ui";
-import axios from "axios";
-const api = axios.create({
-  baseURL:"/api",
-  timeout:3000,
-  headers:{
-    'Content-Type': 'application/json;charset=UTF-8'
-  }
-
-});
+import {inject, ref,h} from 'vue'
+import {FormInst, useDialog} from "naive-ui";
+const dialog = useDialog();
+const reload = inject("reload");
+import api from '@/api/api'
 const formRef = ref<FormInst  | null>(null)
 const rules = ref({
     username:{
@@ -62,16 +56,19 @@ function login() {
       ()=>{
         api.post(
             "/user/login",
-            {
-              username:user.value.username,
-              password:user.value.password
-            }
+             user.value
         ).then(res =>{
-          console.log(res)
-          if(res.data.code==-1){
-            console.error(res.data.message)
+          if(res.data.code === -1){
+            dialog.error({
+              content: ()=>h('p',{style:{
+                "font-size":"20px"
+                }},res.data.msg)
+            })
+           return
           }
-          console.log(res.data)
+          dialog.destroyAll()
+          sessionStorage.setItem("userInfo",JSON.stringify(res.data.data))
+          reload()
         }).catch( e=>{
           console.log(e)
         })

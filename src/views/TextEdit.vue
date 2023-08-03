@@ -15,16 +15,29 @@
 </template>
 
 <script lang="ts" setup>
-import {ref,reactive} from 'vue'
-const value = ref("")
-
-const article:object = reactive({
+import {ref,reactive,inject,h} from 'vue'
+import api from "@/api/api";
+import { useDialog } from 'naive-ui'
+const reload = inject("reload");
+const dialog = useDialog();
+const article = reactive({
   title:"",
   content:'',
 })
 
 function publishArticle(){
-  console.log(article.content)
+  api.post("/article/addArticle",article).then(res=>{
+    if (res.data.code === -1){
+      dialog.error({
+        content: ()=>h("div",res.data.msg)
+      })
+      return
+    }
+    dialog.success({
+      content: ()=>h("div","发布成功")
+    })
+    reload()
+  })
 }
 const save = ref((a,b)=>console.log("12321"));
 

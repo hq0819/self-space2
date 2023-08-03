@@ -1,8 +1,6 @@
 <template>
     <div class="p-parent">
-      <n-dialog-provider>
         <TopBar></TopBar>
-      </n-dialog-provider>
       <div class="p_container">
         <div class="side-left">
           <n-menu :options="menuOptions" style="box-sizing: border-box"></n-menu>
