@@ -1,7 +1,7 @@
 <template>
-    <div class="p-parent">
+    <div class="p-parent" >
         <TopBar></TopBar>
-      <div class="p_container">
+      <div class="p_container" ref="parent">
         <div class="side-left">
           <n-menu :options="menuOptions" style="box-sizing: border-box"></n-menu>
         </div>
@@ -23,37 +23,35 @@
               <n-button quaternary size="large">最新</n-button>
               <n-select :options="options" v-model:value="value" style="width: 120px;margin-left: 440px;" show-arrow clearable/>
             </div>
-            <div class="body-list" style="box-sizing: border-box;padding-left: 10px">
+            <div class="body-list" style="box-sizing: border-box;padding: 10px;">
               <n-list hoverable clickable show-divider @click="toDetail">
-                <n-list-item v-for="article of articles" style="padding: 8px;box-sizing: border-box">
-                  <div style="width: 682px;height: 110px">
-                    <div class="item_header">
+                <n-list-item bordered v-for="article of articleList" :key="article.articleId" style="padding: 8px;box-sizing: border-box">
+                  <n-thing>
+                    <template #description>
                       <n-breadcrumb separator="|">
                         <n-breadcrumb-item> {{article.author}}</n-breadcrumb-item>
                         <n-breadcrumb-item> {{article.timeAgo}}月前</n-breadcrumb-item>
                         <n-breadcrumb-item>{{article.lang}}</n-breadcrumb-item>
                         <n-breadcrumb-item ></n-breadcrumb-item>
                       </n-breadcrumb>
-                    </div>
-                    <div class="item_body" style="height: 80px;width: 696px;margin-top: 3px;display: flex; border-left: 5px;border-right: 5px">
-                      <div style="flex: 5;display: flex;flex-direction: column;justify-content: center;">
-                        <h3 style="line-height:0">{{article.title}}</h3>
-                        <n-ellipsis style="max-width: 490px" line-clamp="2">
-                          {{ article.content }}
-                        </n-ellipsis>
+                      <h3 style="line-height: 0">{{article.title}}</h3>
+                      <div class="item_body" style="display: flex;">
+                        <div style="flex: 5;display: -webkit-box;flex-direction: column;justify-content: center;
+                              -webkit-line-clamp: 2;-webkit-box-orient: vertical; overflow: hidden;
+                          " v-html="article.content">
+                        </div>
+                        <div style="flex: 1;margin-right: 10px" v-if="isShow(article.picUrl)">
+                          <img :src="article.picUrl" style="width: 125px;height: 80px;background-size: cover"  />
+                        </div>
                       </div>
-                      <div style="flex: 1;margin-right: 10px" v-if="isShow(article.picUrl)">
-                        <img :src="article.picUrl" style="width: 125px;height: 80px;background-size: cover"  />
-                      </div>
-                    </div>
-                  </div>
-                  <n-breadcrumb separator="">
-                    <n-breadcrumb-item > <n-icon><eye/></n-icon>{{article.seeCnt}}</n-breadcrumb-item>
-                    <n-breadcrumb-item> <n-icon><HeartCircle/></n-icon>{{article.likeCnt}}</n-breadcrumb-item>
-                    <n-breadcrumb-item > <n-icon><ChatboxEllipsesOutline/></n-icon>{{article.comentCnt}}</n-breadcrumb-item>
-                    <n-breadcrumb-item ></n-breadcrumb-item>
-                  </n-breadcrumb>
-
+                      <n-breadcrumb separator="">
+                        <n-breadcrumb-item > <n-icon><eye/></n-icon>{{article.seeCnt}}</n-breadcrumb-item>
+                        <n-breadcrumb-item> <n-icon><HeartCircle/></n-icon>{{article.likeCnt}}</n-breadcrumb-item>
+                        <n-breadcrumb-item > <n-icon><ChatboxEllipsesOutline/></n-icon>{{article.comentCnt}}</n-breadcrumb-item>
+                        <n-breadcrumb-item ></n-breadcrumb-item>
+                      </n-breadcrumb>
+                    </template>
+                  </n-thing>
                 </n-list-item>
               </n-list>
 
@@ -68,6 +66,7 @@
       </div>
 
     </div>
+  <div v-if="bottom" style="background-color: #f2f2f2;text-align: center">到达底部</div>
 
 </template>
 
@@ -81,7 +80,7 @@ const articles = [
     timeAgo: "5",
     class: "后端",
     lang: "golang",
-    content:"越来越多的互联网大厂开始使用Go语言了，譬如腾讯、美团、滴滴、百度、Google、bilibili...",
+    content:"越来越多的互联网大厂开始使用Go语言了，譬如腾讯、美团、滴滴、百度、Google、bilibili..上的飞机啊撒旦解放爱上了的发生地方士大夫阿萨地方阿斯顿发士大夫阿斯蒂芬.",
     picUrl: `https://img2.baidu.com/it/u=2152476749,2593185558&fm=253&fmt=auto&app=138&f=JPEG?w=397&h=581`,
     comentCnt: 123,
     likeCnt: 290,
@@ -137,12 +136,12 @@ const articles = [
   }
 ]
 import type { MenuOption } from 'naive-ui'
-import { h, ref, Component } from 'vue'
+import {h, ref, Component, onBeforeUnmount, onMounted, reactive} from 'vue'
 import { useRouter } from 'vue-router'
 import { NIcon,NButton,NSelect} from 'naive-ui'
 import TopBar from "@/components/TopBar.vue";
 import {CodeSlashOutline,MusicalNotesSharp,Tv,FunnelOutline,CafeSharp,Camera,Book,Construct,BarcodeOutline,Eye,HeartCircle,ChatboxEllipsesOutline} from '@vicons/ionicons5'
-
+import {queryRecommendArticles, PageInfo, Article,Page} from '@/api/article'
 const router = useRouter()
 function renderIcon (icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -150,6 +149,53 @@ function renderIcon (icon: Component) {
 function isShow(picUrl:string) {
   return picUrl!=null && picUrl != ''
 }
+const articlePage = reactive<PageInfo>({
+  pageSize:10,
+  pageNum:1,
+  orderBy:"create_time desc",
+  total:0,
+  condition:{}
+})
+let pageData:Page<Article>
+const articleList = reactive<Article[]>([])
+onMounted(()=>{
+  queryRecommendArticles(articlePage).then(res=>{
+    pageData = res.data
+    res.data.rows.forEach(e=>articleList.push(e))
+    console.log(articleList[0].author)
+  })
+})
+const parent = ref({})
+const bottom = ref(false)
+
+const doScroll = (event)=>{
+  if(pageData===undefined){
+    return
+  }
+  //滚动离顶部的距离
+  let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+//滚动的总高度
+  let documentScrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+//浏览器窗口的高度(页面可见高度)
+  let getWindowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+  if (scrollTop+getWindowHeight===documentScrollHeight && !pageData.lastPage){
+    articlePage.pageNum+=1
+    queryRecommendArticles(articlePage).then(res=>{
+      pageData = res.data
+      bottom.value = res.data.lastPage
+      res.data.rows.forEach(e=>articleList.push(e))
+    })
+  }
+}
+
+onMounted(()=>{
+  window.addEventListener('scroll', doScroll,{ passive: false})
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', doScroll)
+})
+
 const menuOptions :MenuOption[] = [
   {
     label: "后端",
@@ -269,6 +315,7 @@ const imgUrls = [
   .content-body{
     width: 720px;
     background-color: white;
+    border-bottom: 50px solid #f2f3f5;
   }
   .body-header{
     box-sizing: border-box;

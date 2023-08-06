@@ -10,14 +10,15 @@
       </div>
     </div>
     <div>
-      <mavon-editor style="min-height: 650px" v-model:model-value="article.content" @save="save"  />
+      <mavon-editor style="min-height: 650px" @save="save" @change="change" />
     </div>
 </template>
 
 <script lang="ts" setup>
 import {ref,reactive,inject,h} from 'vue'
-import api from "@/api/api";
+import {addArticle} from '@/api/article'
 import { useDialog } from 'naive-ui'
+import {Article} from '@/api/article'
 const reload = inject("reload");
 const dialog = useDialog();
 const article = reactive({
@@ -26,19 +27,26 @@ const article = reactive({
 })
 
 function publishArticle(){
-  api.post("/article/addArticle",article).then(res=>{
-    if (res.data.code === -1){
+  let result = addArticle(article);
+  result.then(t=>{
+    if(t.code<0){
       dialog.error({
-        content: ()=>h("div",res.data.msg)
+        content: ()=>h("div",t.msg)
       })
-      return
+    }else {
+      dialog.success({
+        content: ()=>h("div",t.msg)
+      })
     }
-    dialog.success({
-      content: ()=>h("div","发布成功")
-    })
-    reload()
   })
+  reload()
 }
+
+function change(value,render){
+  article.content= render
+}
+
+
 const save = ref((a,b)=>console.log("12321"));
 
 

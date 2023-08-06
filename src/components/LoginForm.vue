@@ -1,29 +1,31 @@
 <template>
-  <div class="form-login">
-    <div class="leftSide"></div>
-    <div class="form-item">
-      <n-form ref="formRef" :model="user" :rules="rules">
-        <n-form-item label="用户名"  path="username">
-          <n-input v-model:value="user.username" placeholder=""/>
-        </n-form-item>
-        <n-form-item label="密码" path="password">
-          <n-input type="password" v-model:value="user.password" placeholder="" />
-        </n-form-item>
-      </n-form>
-      <n-button class="item" type="info"  @click="login">登录</n-button>
+
+  <n-spin :show="spinFlag">
+    <div class="form-login">
+      <div class="leftSide"></div>
+      <div class="form-item">
+        <n-form ref="formRef" :model="user" :rules="rules">
+          <n-form-item label="用户名"  path="username">
+            <n-input v-model:value="user.username" placeholder=""/>
+          </n-form-item>
+          <n-form-item label="密码" path="password">
+            <n-input type="password" v-model:value="user.password" placeholder="" />
+          </n-form-item>
+        </n-form>
+        <n-button class="item" type="info"  @click="login">登录</n-button>
+      </div>
     </div>
+  </n-spin>
 
-
-  </div>
 
 </template>
-
 <script lang="ts" setup>
 import {inject, ref,h} from 'vue'
 import {FormInst, useDialog} from "naive-ui";
 const dialog = useDialog();
 const reload = inject("reload");
 import api from '@/api/api'
+let spinFlag = ref(false)
 const formRef = ref<FormInst  | null>(null)
 const rules = ref({
     username:{
@@ -51,6 +53,7 @@ const user = ref({
   password:""
 })
 function login() {
+  spinFlag.value = true
   const p = formRef.value?.validate()
   p?.then(
       ()=>{
@@ -66,6 +69,7 @@ function login() {
             })
            return
           }
+          spinFlag.value = false
           dialog.destroyAll()
           sessionStorage.setItem("userInfo",JSON.stringify(res.data.data))
           reload()
