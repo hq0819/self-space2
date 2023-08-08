@@ -30,11 +30,11 @@ function publishArticle(){
   addArticle(article).then(res=>{
     if(res.data.code<0){
       dialog.error({
-        content: ()=>h("div",t.msg)
+        content: ()=>h("div",res.data.msg)
       })
     }else {
       dialog.success({
-        content: ()=>h("div",t.msg)
+        content: ()=>h("div",res.data.msg)
       })
     }
   })

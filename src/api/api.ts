@@ -7,16 +7,17 @@ function group(prefix:string):AxiosInstance{
         timeout: 3000,
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'
-        },
-        validateStatus: (status) => {
-            return status !== 210;
-
         }
     });
      app.interceptors.request.use(config => {
-         console.log(config)
          return config
      })
+    app.interceptors.response.use(resp => {
+        if (resp.data.msg==='请先登录'){
+            localStorage.removeItem("userInfo")
+        }
+        return resp
+    })
     return app
 }
 
