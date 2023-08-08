@@ -160,9 +160,8 @@ let pageData:Page<Article>
 const articleList = reactive<Article[]>([])
 onMounted(()=>{
   queryRecommendArticles(articlePage).then(res=>{
-    pageData = res.data
-    res.data.rows.forEach(e=>articleList.push(e))
-    console.log(articleList[0].author)
+    pageData = res.data.data
+    res.data.data.rows.forEach(e=>articleList.push(e))
   })
 })
 const parent = ref({})
@@ -181,9 +180,9 @@ const doScroll = (event)=>{
   if (scrollTop+getWindowHeight===documentScrollHeight && !pageData.lastPage){
     articlePage.pageNum+=1
     queryRecommendArticles(articlePage).then(res=>{
-      pageData = res.data
-      bottom.value = res.data.lastPage
-      res.data.rows.forEach(e=>articleList.push(e))
+      pageData = res.data.data
+      bottom.value = res.data.data.lastPage
+      res.data.data.rows.forEach(e=>articleList.push(e))
     })
   }
 }

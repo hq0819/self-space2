@@ -1,26 +1,6 @@
-import axios from "axios";
-const api = axios.create({
-    baseURL:"/api/article",
-    headers:{
-        'Content-Type': 'application/json;charset=UTF-8'
-    }
-});
-
-
-type PageInfo = {
-    pageSize:number,
-    pageNum:number,
-    orderBy:string
-    total:number
-    condition:object
-}
-type Page<T> = {
-    pageSize:number,
-    pageNum:number,
-    total:number,
-    rows:Array<T>,
-    lastPage:boolean
-}
+import {group,PageInfo,Page,Result} from "@/api/api";
+import {AxiosResponse} from "axios";
+const api = group("/api/article")
 
 type Article = {
     articleId:number,
@@ -32,16 +12,11 @@ type Article = {
     timeAgo:string,
     createTime:string
 }
-type Result<T> = {
-    msg:string
-    code: number
-    data:T
-}
 
 
-async function addArticle(article: object): Promise<Result<object>> {
-    let response = await api.post("/addArticle", article);
-    return response.data
+
+async function addArticle(article: object): Promise<AxiosResponse<Result<Object>>> {
+    return  await api.post("/addArticle", article);
 }
 async function addSupport(id:string):Promise<Result<object>>{
     let res = await api.get("/addSupport",{
@@ -51,9 +26,9 @@ async function addSupport(id:string):Promise<Result<object>>{
     });
     return res.data
 }
-async function queryRecommendArticles(obj:PageInfo):Promise<Result<Page<Article>>>{
-    let res = await api.post("/queryRecommendArticles",obj);
-    return res.data
+async function queryRecommendArticles(obj:PageInfo):Promise<AxiosResponse<Result<Page<Article>>>>{
+   return await api.post("/queryRecommendArticles",obj);
+
 }
 
-export {addArticle,addSupport,queryRecommendArticles,PageInfo,Article,Page}
+export {addArticle,addSupport,queryRecommendArticles,Article}

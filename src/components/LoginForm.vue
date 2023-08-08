@@ -24,7 +24,7 @@ import {inject, ref,h} from 'vue'
 import {FormInst, useDialog} from "naive-ui";
 const dialog = useDialog();
 const reload = inject("reload");
-import api from '@/api/api'
+import {userLogin,User} from '@/api/login'
 let spinFlag = ref(false)
 const formRef = ref<FormInst  | null>(null)
 const rules = ref({
@@ -48,7 +48,7 @@ function validateAll () {
 }
 
 
-const user = ref({
+const user = ref<User>({
   username:"",
   password:""
 })
@@ -56,29 +56,29 @@ function login() {
   spinFlag.value = true
   const p = formRef.value?.validate()
   p?.then(
-      ()=>{
-        api.post(
-            "/user/login",
-             user.value
-        ).then(res =>{
-          if(res.data.code === -1){
+      ()=> {
+        userLogin(user.value).then(res => {
+          const cookie = document.cookie;
+          if (res.data.code < 0) {
             dialog.error({
-              content: ()=>h('p',{style:{
-                "font-size":"20px"
-                }},res.data.msg)
+              content: () => h('p', {
+                style: {
+                  "font-size": "20px"
+                }
+              }, res.data.msg)
             })
-           return
+            return
           }
+          localStorage.setItem("userInfo",JSON.stringify(res.data.data))
           spinFlag.value = false
           dialog.destroyAll()
-          sessionStorage.setItem("userInfo",JSON.stringify(res.data.data))
           reload()
-        }).catch( e=>{
-          console.log(e)
         })
-      }
-  )
+      }).catch(reason => {
+      localStorage.removeItem("userInfo")
+      })
 }
+
 </script>
 
 

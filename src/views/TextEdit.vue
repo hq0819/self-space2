@@ -27,9 +27,8 @@ const article = reactive({
 })
 
 function publishArticle(){
-  let result = addArticle(article);
-  result.then(t=>{
-    if(t.code<0){
+  addArticle(article).then(res=>{
+    if(res.data.code<0){
       dialog.error({
         content: ()=>h("div",t.msg)
       })

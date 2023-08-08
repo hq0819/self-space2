@@ -85,10 +85,10 @@ let info = {
 }
 const dialog = useDialog();
 function showLogin():boolean{
-  if(sessionStorage["userInfo"]===undefined){
+  if(localStorage["userInfo"]===undefined){
     return true
   }
- info = JSON.parse(sessionStorage["userInfo"])
+ info = JSON.parse(localStorage["userInfo"])
   return false
 }
 function login(){
