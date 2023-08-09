@@ -10,7 +10,7 @@
       </div>
     </div>
     <div>
-      <mavon-editor style="min-height: 650px" @save="save" @change="change" />
+      <mavon-editor ref="edite" style="min-height: 650px" @save="save" @change="change" @imgAdd="addImg" />
     </div>
 </template>
 
@@ -18,13 +18,21 @@
 import {ref,reactive,inject,h} from 'vue'
 import {addArticle} from '@/api/article'
 import { useDialog } from 'naive-ui'
-import {Article} from '@/api/article'
+import {upload} from "@/api/common";
+
 const reload = inject("reload");
 const dialog = useDialog();
 const article = reactive({
   title:"",
   content:'',
 })
+const edite = ref({})
+
+function addImg(name:string,file:File){
+  upload(file).then(res=>{
+    edite.value.$img2Url(name,res.data.data)
+  })
+}
 
 function publishArticle(){
   addArticle(article).then(res=>{

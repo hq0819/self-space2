@@ -1,5 +1,6 @@
 import {group,PageInfo,Page,Result} from "@/api/api";
 import {AxiosResponse} from "axios";
+import {RouteParamValue} from "vue-router";
 const api = group("/api/article")
 
 type Article = {
@@ -30,5 +31,8 @@ async function queryRecommendArticles(obj:PageInfo):Promise<AxiosResponse<Result
    return await api.post("/queryRecommendArticles",obj);
 
 }
+async function queryDetail(id: string | RouteParamValue[]):Promise<AxiosResponse<Result<Page<Article>>>>{
+    return await api.post("/queryDetail/"+id);
+}
 
-export {addArticle,addSupport,queryRecommendArticles,Article}
+export {addArticle,addSupport,queryRecommendArticles,Article,queryDetail}

@@ -4,7 +4,7 @@ import axios, {AxiosInstance} from "axios";
 function group(prefix:string):AxiosInstance{
      let app = axios.create({
         baseURL: prefix,
-        timeout: 3000,
+        timeout: 6000,
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'
         }
@@ -21,7 +21,7 @@ function group(prefix:string):AxiosInstance{
     return app
 }
 
-type PageInfo = {
+export type PageInfo = {
     pageSize:number,
     pageNum:number,
     orderBy:string

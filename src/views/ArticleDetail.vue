@@ -8,7 +8,7 @@
         <div >
           <n-thing>
               <template #header>
-                <h2 style="line-height: 0.5em">这是一个文章的标题</h2>
+                <h2 style="line-height: 0.5em">{{ artItem.title }}</h2>
               </template>
             <template #description>
               <div style="display: flex;height:50px;align-items: center">
@@ -17,13 +17,13 @@
                     <n-icon size="25">
                       <PersonCircleOutline></PersonCircleOutline>
                     </n-icon>
-                    <span>贺钦11</span>
+                    <span>{{artItem.author}}</span>
                   </li>
                   <li>
                     <n-icon size="25">
                       <TimeOutline></TimeOutline>
                     </n-icon>
-                    <span style="vertical-align: center">2023-08-01 12:00:00</span>
+                    <span style="vertical-align: center">{{artItem.createTime}}</span>
                   </li>
                 </ul>
 
@@ -32,7 +32,7 @@
             </template>
           </n-thing>
         </div>
-        <div v-html="str">
+        <div v-html="artItem.content">
         </div>
 
       </div>
@@ -91,6 +91,11 @@
 import TopBar from "@/components/TopBar.vue";
 import {PersonCircleOutline,TimeOutline,Eye,ThumbsUpSharp}  from '@vicons/ionicons5'
 import {NButton} from 'naive-ui'
+import {useRoute} from 'vue-router'
+import {onBeforeMount, reactive, ref} from "vue";
+import {Article,queryDetail} from "@/api/article";
+
+const route = useRoute();
 const recomandArticles = [
 
   {
@@ -113,10 +118,21 @@ const userInfo = {
   username:"贺钦11",
   positionType:"后端开发工程师"
 }
+
 const articleDetail = {
   likeCnt:342,
   seeCnt: 200
 }
+let artItem = ref({})
+
+onBeforeMount(()=>{
+   let id = route.params.id;
+  queryDetail(id).then(res=>{
+    artItem.value = res.data.data
+  })
+})
+
+
 const str = `
 
 <p>

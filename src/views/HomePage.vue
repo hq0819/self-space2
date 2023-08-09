@@ -24,8 +24,8 @@
               <n-select :options="options" v-model:value="value" style="width: 120px;margin-left: 440px;" show-arrow clearable/>
             </div>
             <div class="body-list" style="box-sizing: border-box;padding: 10px;">
-              <n-list hoverable clickable show-divider @click="toDetail">
-                <n-list-item bordered v-for="article of articleList" :key="article.articleId" style="padding: 8px;box-sizing: border-box">
+              <n-list hoverable clickable show-divider >
+                <n-list-item @click="toDetail(article)" bordered v-for="article of articleList" :key="article.articleId" style="padding: 8px;box-sizing: border-box">
                   <n-thing>
                     <template #description>
                       <n-breadcrumb separator="|">
@@ -73,75 +73,15 @@
 
 <script lang="ts" setup >
 
-const articles = [
-  {
-    author: "heqin11",
-    title:"为什么越来越多的公司选择了go?",
-    timeAgo: "5",
-    class: "后端",
-    lang: "golang",
-    content:"越来越多的互联网大厂开始使用Go语言了，譬如腾讯、美团、滴滴、百度、Google、bilibili..上的飞机啊撒旦解放爱上了的发生地方士大夫阿萨地方阿斯顿发士大夫阿斯蒂芬.",
-    picUrl: `https://img2.baidu.com/it/u=2152476749,2593185558&fm=253&fmt=auto&app=138&f=JPEG?w=397&h=581`,
-    comentCnt: 123,
-    likeCnt: 290,
-    seeCnt:100
-  },
-  {
-    author: "heqin11",
-    title:"java目前的就业行情如何？",
-    timeAgo: "5",
-    class: "后端",
-    lang: "java",
-    content:"越来越多的互联网大厂开始使用Go语言了，譬如腾讯、美团、滴滴、百度、Google、bilibili...",
-    picUrl: `https://img2.baidu.com/it/u=2152476749,2593185558&fm=253&fmt=auto&app=138&f=JPEG?w=397&h=581`,
-    comentCnt: 123,
-    likeCnt: 290,
-    seeCnt:100
-  },
-  {
-    author: "heqin11",
-    title:"java目前的就业行情如何？",
-    timeAgo: "5",
-    class: "后端",
-    lang: "java",
-    content:"越来越多的互联网大厂开始使用Go语言了，譬如腾讯、美团、滴滴、百度、Google、bilibili...",
-    picUrl: `https://img2.baidu.com/it/u=2152476749,2593185558&fm=253&fmt=auto&app=138&f=JPEG?w=397&h=581`,
-    comentCnt: 123,
-    likeCnt: 290,
-    seeCnt:100
-  },
-  {
-    author: "heqin11",
-    title:"java目前的就业行情如何？",
-    timeAgo: "5",
-    class: "后端",
-    lang: "java",
-    content:"越来越多的互联网大厂开始使用Go语言了，譬如腾讯、美团、滴滴、百度、Google、bilibili...",
-    picUrl: `https://img2.baidu.com/it/u=2152476749,2593185558&fm=253&fmt=auto&app=138&f=JPEG?w=397&h=581`,
-    comentCnt: 123,
-    likeCnt: 290,
-    seeCnt:100
-  },
-  {
-    author: "heqin11",
-    title:"java目前的就业行情如何？",
-    timeAgo: "5",
-    class: "后端",
-    lang: "java",
-    content:"越来越多的互联网大厂开始使用Go语言了，譬如腾讯、美团、滴滴、百度、Google、bilibili...",
-    picUrl: `https://img2.baidu.com/it/u=2152476749,2593185558&fm=253&fmt=auto&app=138&f=JPEG?w=397&h=581`,
-    comentCnt: 123,
-    likeCnt: 290,
-    seeCnt:100
-  }
-]
+
 import type { MenuOption } from 'naive-ui'
 import {h, ref, Component, onBeforeUnmount, onMounted, reactive} from 'vue'
 import { useRouter } from 'vue-router'
 import { NIcon,NButton,NSelect} from 'naive-ui'
 import TopBar from "@/components/TopBar.vue";
 import {CodeSlashOutline,MusicalNotesSharp,Tv,FunnelOutline,CafeSharp,Camera,Book,Construct,BarcodeOutline,Eye,HeartCircle,ChatboxEllipsesOutline} from '@vicons/ionicons5'
-import {queryRecommendArticles, PageInfo, Article,Page} from '@/api/article'
+import {queryRecommendArticles, Article} from '@/api/article'
+import {PageInfo,Page} from '@/api/api'
 const router = useRouter()
 function renderIcon (icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -263,7 +203,14 @@ const options  = [
     value: "golang"
   }
 ]
-const toDetail = ()=>router.push("/detail")
+const toDetail = (article)=>router.push(
+    {
+      name:"articleDetail",
+      params:{
+        id:article.articleId
+      }
+    }
+)
 
 const imgUrls = [
   `https://image.meiye.art/pic_1631421521136iuvLk0g1Dtdd5F67jNnx6?imageMogr2/thumbnail/560x/interlace/1`,

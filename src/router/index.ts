@@ -13,7 +13,8 @@ const router = createRouter({
             component: HomePage
         },
         {
-            path: "/detail",
+            name:"articleDetail",
+            path: "/detail/:id",
             component: ArticleDetail
         },
         {
