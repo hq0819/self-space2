@@ -41,8 +41,8 @@
           <div style="display: flex;align-items: center;">
             <n-avatar round style="width: 55px;height: 55px;margin-right: 20px" src="https://img0.baidu.com/it/u=1257177296,511470069&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500"/>
             <div>
-              <span>{{ userInfo.username }}</span>
-              <div style="color: gray">{{userInfo.positionType}}</div>
+              <span>{{ artItem.author }}</span>
+              <div style="color: gray">{{artItem.positionType}}</div>
             </div>
           </div>
           <div style="margin-top: 6px">
@@ -92,7 +92,7 @@ import TopBar from "@/components/TopBar.vue";
 import {PersonCircleOutline,TimeOutline,Eye,ThumbsUpSharp}  from '@vicons/ionicons5'
 import {NButton} from 'naive-ui'
 import {useRoute} from 'vue-router'
-import {onBeforeMount, reactive, ref} from "vue";
+import {onBeforeMount, onMounted, reactive, ref} from "vue";
 import {Article,queryDetail} from "@/api/article";
 
 const route = useRoute();
@@ -125,48 +125,12 @@ const articleDetail = {
 }
 let artItem = ref({})
 
-onBeforeMount(()=>{
+onMounted(()=>{
    let id = route.params.id;
   queryDetail(id).then(res=>{
     artItem.value = res.data.data
   })
 })
-
-
-const str = `
-
-<p>
-  这是一段包含 <strong>粗体文本</strong>、<em>斜体文本</em> 和 <u>下划线文本</u> 的富文本。
-</p>
-
-<p>
-  以下是一个有序列表：
-</p>
-
-<ol>
-  <li>项目 1</li>
-  <li>项目 2</li>
-  <li>项目 3</li>
-</ol>
-
-<p>
-  以下是一个无序列表：
-</p>
-
-<ul>
-  <li>项目 A</li>
-  <li>项目 B</li>
-  <li>项目 C</li>
-</ul>
-
-<p>
-  可以插入一个链接：<a href="https://www.example.com">示例链接</a>
-</p>
-
-<p>
-  在段落中添加图片：<img src="https://www.example.com/image.jpg" alt="示例图片">
-</p>
-`
 
 </script>
 

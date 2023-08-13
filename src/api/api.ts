@@ -25,7 +25,6 @@ export type PageInfo = {
     pageSize:number,
     pageNum:number,
     orderBy:string
-    total:number
     condition:object
 }
 type Page<T> = {

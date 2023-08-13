@@ -30,7 +30,7 @@
                     <template #description>
                       <n-breadcrumb separator="|">
                         <n-breadcrumb-item> {{article.author}}</n-breadcrumb-item>
-                        <n-breadcrumb-item> {{article.timeAgo}}月前</n-breadcrumb-item>
+                        <n-breadcrumb-item> {{article.timeAgo}}天前</n-breadcrumb-item>
                         <n-breadcrumb-item>{{article.lang}}</n-breadcrumb-item>
                         <n-breadcrumb-item ></n-breadcrumb-item>
                       </n-breadcrumb>
@@ -38,16 +38,16 @@
                       <div class="item_body" style="display: flex;">
                         <div style="flex: 5;display: -webkit-box;flex-direction: column;justify-content: center;
                               -webkit-line-clamp: 2;-webkit-box-orient: vertical; overflow: hidden;
-                          " v-html="article.content">
+                          " v-html="article.desc">
                         </div>
                         <div style="flex: 1;margin-right: 10px" v-if="isShow(article.picUrl)">
                           <img :src="article.picUrl" style="width: 125px;height: 80px;background-size: cover"  />
                         </div>
                       </div>
                       <n-breadcrumb separator="">
-                        <n-breadcrumb-item > <n-icon><eye/></n-icon>{{article.seeCnt}}</n-breadcrumb-item>
-                        <n-breadcrumb-item> <n-icon><HeartCircle/></n-icon>{{article.likeCnt}}</n-breadcrumb-item>
-                        <n-breadcrumb-item > <n-icon><ChatboxEllipsesOutline/></n-icon>{{article.comentCnt}}</n-breadcrumb-item>
+                        <n-breadcrumb-item > <n-icon><eye/></n-icon>{{article.scanCount}}</n-breadcrumb-item>
+                        <n-breadcrumb-item> <n-icon><HeartCircle/></n-icon>{{article.supportCount}}</n-breadcrumb-item>
+                        <n-breadcrumb-item > <n-icon><ChatboxEllipsesOutline/></n-icon>{{article.commentCount}}</n-breadcrumb-item>
                         <n-breadcrumb-item ></n-breadcrumb-item>
                       </n-breadcrumb>
                     </template>
@@ -93,7 +93,6 @@ const articlePage = reactive<PageInfo>({
   pageSize:10,
   pageNum:1,
   orderBy:"create_time desc",
-  total:0,
   condition:{}
 })
 let pageData:Page<Article>
@@ -101,7 +100,7 @@ const articleList = reactive<Article[]>([])
 onMounted(()=>{
   queryRecommendArticles(articlePage).then(res=>{
     pageData = res.data.data
-    res.data.data.rows.forEach(e=>articleList.push(e))
+    articleList.push(...res.data.data.rows)
   })
 })
 const parent = ref({})

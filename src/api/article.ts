@@ -8,10 +8,14 @@ type Article = {
     title:string,
     authorId:number,
     author:string,
-    picUrl:string,
     content:string,
+    desc:string
     timeAgo:string,
-    createTime:string
+    coverUrl:string,
+    createTime:string,
+    supportCount:string,
+    scanCount:string,
+    commentCount:string
 }
 
 

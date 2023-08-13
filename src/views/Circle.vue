@@ -7,28 +7,46 @@
       <div class="text-area">
         <div class="text-input">
           <n-input
-              v-model:value="trends.content"
+              v-model:value="trend.content"
               type="textarea"
               maxlength="1000"
               placeholder="#发动态"
               show-count
               :autosize="textArea"
               style="border: none;font-size: 16px"
-          />
+          >
+          </n-input>
         </div>
         <div>
         </div>
         <div class="text-fu">
           <div class="t-item" style="display: flex;align-items: center">
-            <V3Emoji @clickEmoji="addEmoji" size="mid" :custom-size="customSize" :model-value="trends.content"
+            <V3Emoji @clickEmoji="addEmoji" size="mid" :custom-size="customSize" :model-value="trend.content" class="v3Emoji"
                      fix-pos="downright" style="width: 26px" :options-name="optionsName">
               <div style="display: flex;align-items: center;height: 30px"><SmileOutlined style="color: brown;font-size: 20px">
               </SmileOutlined><div style="display: flex;align-items: center;margin-left: 5px"><span style="font-size: 10px;width: 30px">表情</span></div></div>
             </V3Emoji>
           </div>
           <div class="t-item" style="display: flex;align-items: center;margin-left: 50px">
-            <PictureOutlined style="color: cadetblue;font-size: 20px"></PictureOutlined>
-            <div style="width: 40px;margin-left: 5px">图片</div>
+            <n-popover trigger="click" raw :show-arrow="false" placement="bottom">
+              <template #trigger>
+                <div style="display: flex">
+                  <PictureOutlined style="color: cadetblue;font-size: 20px"></PictureOutlined>
+                  <div style="width: 40px;margin-left: 5px">图片</div>
+                </div>
+              </template>
+              <div style="width: 200px;height: 100px;background-color: white">
+                <n-upload
+                    accept="image"
+                    action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
+                    list-type="image-card"
+                    :default-file-list="fileList"
+                    :custom-request="picUpload"
+                >
+                  点击上传
+                </n-upload>
+              </div>
+            </n-popover>
           </div>
           <div style="margin-left: 70%" class="item">
             <n-button type="info" @click="publish">发表</n-button>
@@ -36,7 +54,7 @@
         </div>
       </div>
       <div class="trends">
-        <div class="trends-item" v-for="(tu,index) of trendUsers" :key="index" style="margin-bottom: 10px">
+        <div class="trends-item" v-for="(tu,index) of trendsList" :key="tu.id" style="margin-bottom: 10px">
           <n-card footer-style="padding-bottom:0px;" header-style="padding-bottom:5px;">
             <template #header>
               <div style="display: flex;align-items: center;">
@@ -45,7 +63,7 @@
                     size="medium"
                     :src="tu.avatar"
                 />
-                <div style="margin-left: 10px"><span style="color: gray">{{ tu.username }}</span></div>
+                <div style="margin-left: 10px"><span style="color: gray">{{ tu.author }}</span></div>
               </div>
             </template>
             <template #default>
@@ -57,7 +75,7 @@
                 </Clamp>
               </div>
               <div style="display: flex;flex-wrap: wrap">
-                <n-image v-for="img of tu.contentPic" height="200" :src="img"
+                <n-image v-for="img of tu.pics" height="200" :src="img"
                          style="margin-right: 10px;margin-bottom: 10px"/>
               </div>
             </template>
@@ -115,6 +133,7 @@
           </n-card>
         </div>
       </div>
+      <div v-if="bottom" style="background-color: #f2f2f2;text-align: center">到达底部</div>
     </template>
   </MainFrame>
 
@@ -122,86 +141,110 @@
 
 <script lang="ts" setup>
 import MainFrame from "@/components/MainFrame.vue"
-import {MenuOption, NIcon} from 'naive-ui'
+import {MenuOption, NIcon, UploadCustomRequestOptions, UploadFileInfo, useDialog} from 'naive-ui'
 import {
-  TimeOutline,
-  PersonCircleOutline,
   BookmarkOutline,
-  ShareSocialOutline,
   ChatboxEllipsesOutline,
-  HeartOutline
+  HeartOutline,
+  PersonCircleOutline,
+  ShareSocialOutline,
+  TimeOutline
 } from "@vicons/ionicons5";
-import {Component, h, ref} from "vue";
-import {FireOutlined, StarOutlined, PictureOutlined,SmileOutlined} from '@ant-design/icons-vue'
+import {Component, h, inject, onMounted, reactive, ref} from "vue";
+import {FireOutlined, PictureOutlined, SmileOutlined, StarOutlined} from '@ant-design/icons-vue'
 import V3Emoji from 'vue3-emoji'
 import Clamp from '@/components/Clamp.vue'
 import TextInputer from '@/components/TextInputer.vue'
+import {publishTrends, PublishTrendsPO, queryTrends, Trends} from '@/api/trends'
+import {Page, PageInfo} from '@/api/api'
+import {upload} from "@/api/common";
+import _ from 'lodash'
+
+const reload = inject("reload");
+const dialog = useDialog();
 
 function showComment(tu) {
   tu.showCommentFlag = !tu.showCommentFlag
 }
+let pageInfo = reactive<PageInfo>({
+  pageNum: 1,
+  pageSize: 10,
+  condition:{},
+  orderBy:"create_time desc",
+});
+let trendsList = reactive<Trends[]>([])
+let page:Page<Trends>
 
-const trendUsers = ref([
-  {
-    trendId: 1001,
-    username: "fearless77",
-    avatar: "https://image.meiye.art/pic_C_I6p1zvMvb2-56U1A9uQ?imageMogr2/thumbnail/560x/interlace/1",
-    content: "今天天气很好呀,今天天气很好呀手动阀评手动阀；手动阀是地方手动方式地方是地方手动阀手动方式地方 审代奥索欧迪芬就手动阀手动阀方送到佛我 我是地方神判断发是的封建士大夫手动方式地方手动方式电风扇电风扇打法士大夫怕手动发外网额撒旦飞洒的",
-    contentPic: [
-      "https://image.meiye.art/Fv8zYJQM6S3WJeMzPNQHKSA89r6J?imageMogr2/thumbnail/470x/interlace/1",
-      "https://image.meiye.art/FjCI1XicLNGF-JQ9cFL9QjprOw71?imageMogr2/thumbnail/470x/interlace/1",
+onMounted(()=>{
+  queryTrends(pageInfo).then(res=>{
+    page = res.data.data
+    trendsList.push(...res.data.data.rows)
+  })
+})
 
-    ],
-    showCommentFlag: false,
-    comments: [
-      {
-        commentId: "100",
-        username: "heqin11",
-        avatar: "https://image.meiye.art/pic_C_I6p1zvMvb2-56U1A9uQ?imageMogr2/thumbnail/560x/interlace/1",
-        content: "哈哈哈,写得好啊",
-        replyId: 111,
-      }
-    ]
-  },
-  {
-    trendId: 1002,
-    username: "fearless77",
-    avatar: "https://image.meiye.art/pic_C_I6p1zvMvb2-56U1A9uQ?imageMogr2/thumbnail/560x/interlace/1",
-    content: "位符扫地方阿斯阀手动阀扫地方奥索扫地方阿松大发啊；位符扫地方阿斯阀手动阀扫地方奥索扫地方阿松大发啊",
-    contentPic: [
-      "https://image.meiye.art/Fv8zYJQM6S3WJeMzPNQHKSA89r6J?imageMogr2/thumbnail/470x/interlace/1",
-    ],
-    showCommentFlag: false,
-    comments: [
-      {
-        commentId: "100",
-        username: "heqin11",
-        avatar: "https://image.meiye.art/pic_C_I6p1zvMvb2-56U1A9uQ?imageMogr2/thumbnail/560x/interlace/1",
-        content: "哈哈哈,",
-        replyId: 111,
-      },{
-        commentId: "100",
-        username: "heqin11",
-        avatar: "https://image.meiye.art/pic_C_I6p1zvMvb2-56U1A9uQ?imageMogr2/thumbnail/560x/interlace/1",
-        content: "哈哈哈,写得好啊",
-        replyId: 111,
-      }
-    ]
-  }
-])
+const trend = reactive<PublishTrendsPO>({
+  content:"",
+  pics:[]
+})
 
+const fileList = reactive<Array<UploadFileInfo>>([])
 function addEmoji(e) {
-  trends.value.content += e
+  trend.content += e
 }
 
-
-
+const  picUpload = ref((options: UploadCustomRequestOptions)=>{
+  let file = options.file.file as File
+  upload(file).then(res=>{
+    options.file.url = res.data.data
+    fileList.push(options.file)
+  })
+})
 function publish() {
-  console.log(trends)
+  trend.pics = _.map(fileList, e => e.url as string)
+  publishTrends(trend).then(res=>{
+    if(res.data.code===-1){
+      dialog.error({
+        content: res.data.msg
+      })
+      return
+    }
+    dialog.success({
+      content:res.data.msg
+    })
+    reload()
+  })
+
 }
+
+const bottom = ref(false)
 function publishMessage(e,id){
   console.log(id,e.value)
 }
+const doScroll = (event)=>{
+  if(page ===undefined || page.lastPage){
+    return
+  }
+  //滚动离顶部的距离
+  let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+//滚动的总高度
+  let documentScrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+//浏览器窗口的高度(页面可见高度)
+  let getWindowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+  if (scrollTop+getWindowHeight===documentScrollHeight && !page.lastPage){
+    pageInfo.pageNum+=1
+    queryTrends(pageInfo).then(res=>{
+      page = res.data.data
+      bottom.value = res.data.data.lastPage
+      trendsList.push(...res.data.data.rows)
+    })
+  }
+}
+
+onMounted(()=>{
+  window.addEventListener('scroll', doScroll,{ passive: false})
+})
+
+
 
 const optionsName = {
   'Smileys & Emotion': '笑脸&表情',
@@ -272,12 +315,10 @@ const menuList: MenuOption[] = [
   },
 
 ]
-const trends = ref({
-  content: ""
-})
+
 const textArea = {
-  minRows: 5,
-  maxRows: 5,
+  minRows: 3,
+  maxRows: 3,
 }
 
 </script>
@@ -325,7 +366,7 @@ V3Emoji:last-child {
 }
 
 .text-area {
-  height: 210px;
+
   margin-bottom: 5px;
   background-color: white;
   box-sizing: border-box;
