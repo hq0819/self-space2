@@ -7,6 +7,8 @@ import './assets/common.css'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import 'vue3-emoji/dist/style.css'
+import infiniteScroll from 'vue3-infinite-scroll-better'
+
 import {createPinia} from "pinia";
 const pinia = createPinia();
 
@@ -17,4 +19,5 @@ app.use(router)
 app.use(naive)
 app.use(mavonEditor)
 app.use(pinia)
+app.use(infiniteScroll)
 app.mount('#app')

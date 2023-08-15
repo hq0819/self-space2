@@ -24,21 +24,32 @@ function group(prefix:string):AxiosInstance{
 class PageInfo{
     pageSize:number = 1
     pageNum:number = 10
-    orderBy:string
-    condition:object
+    orderBy?:string
+    condition?:object
 }
-class Page<T>{
+interface Page<T>{
     pageSize:number
     pageNum:number
     total:number
     rows:Array<T>
     lastPage:boolean
 }
-class Result<T> {
+interface Result<T> {
     msg:string
     code: number
     data:T
 }
 
+class ScrollProp {
+    scrollDalay :number = 200
+    scrollDisabled:boolean=false
+    doScrollDistance:number= 505
+    immediateCheck:boolean=false
+    bindDisableField:string
 
-export  {group,PageInfo,Page,Result}
+    constructor() {
+    }
+}
+
+
+export  {group,PageInfo,Page,Result,ScrollProp}

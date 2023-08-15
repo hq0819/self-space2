@@ -164,7 +164,7 @@ import {Comment} from "@/api/comment";
 
 const reload = inject("reload");
 const dialog = useDialog();
-let commentResult = new Page()
+let commentResult = reactive<Page<Comment>>({})
 let commentShowFlag = ref(false)
 function showComment(id:string) {
   if(commentShowFlag.value){
@@ -177,7 +177,7 @@ function showComment(id:string) {
       "type":"T"
     }
     queryTrendsComment(pageInfo).then(res=>{
-      commentResult = res.data.data
+      commentResult = reactive(res.data.data)
     })
     console.log(commentResult)
     commentShowFlag.value = true

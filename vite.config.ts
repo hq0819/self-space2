@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: "http://127.0.0.1:9001", //跨域地址
+        target: "http://114.115.213.117:9001", //跨域地址
         changeOrigin: true, //支持跨域
         rewrite: (path) => path.replace(/^\/api/, '')   //重写路径
 

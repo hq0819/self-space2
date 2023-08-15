@@ -20,7 +20,9 @@
     "vue": "^3.3.2",
     "vue-router": "^4.2.0",
     "vue3-emoji": "^2.0.0",
-    "vue3-emoji-picker": "^1.1.7"
+    "vue3-emoji-picker": "^1.1.7",
+    "vue3-infinite-list": "^0.2.5",
+    "vue3-infinite-scroll-better": "^2.2.0"
   },
   "devDependencies": {
     "@tsconfig/node18": "^2.0.1",

@@ -4,7 +4,7 @@ import {Comment} from "@/api/comment";
 
 const api = group("/api/trends");
 
-type Trends = {
+interface Trends{
     id :string,
     author:string
     authorId:number
@@ -14,7 +14,7 @@ type Trends = {
     createTime:string
 }
 
-type PublishTrendsPO = {
+interface PublishTrendsPO{
     content:string
     pics:Array<string>
 }

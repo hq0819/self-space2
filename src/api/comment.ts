@@ -1,4 +1,4 @@
-class Comment {
+interface Comment {
     id:string
     author:string
     authorId:string

@@ -3,11 +3,11 @@ import {AxiosResponse} from "axios";
 
 const api = group("/api/user")
 
-class User{
+interface User{
     username:string
     passoword:string
 }
-class UserInfo{
+interface UserInfo{
     rowId:string
     username:string
     gender:string

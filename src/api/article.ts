@@ -4,7 +4,7 @@ import {RouteParamValue} from "vue-router";
 import {Comment} from "@/api/comment";
 const api = group("/api/article")
 
-class Article{
+interface Article{
     articleId:number
     title:string
     authorId:number
