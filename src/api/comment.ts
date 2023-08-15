@@ -1,12 +1,14 @@
-import axios from "axios";
-const api = axios.create({
-    baseURL:"/api/comment",
-    headers:{
-        'Content-Type': 'application/json;charset=UTF-8'
-    }
-});
+class Comment {
+    id:string
+    author:string
+    authorId:string
+    avatar:string
+    content:string
+    pics:string
+    createTime:string
+}
 
-
+export {Comment}
 
 
 

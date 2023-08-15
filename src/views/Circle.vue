@@ -54,7 +54,7 @@
         </div>
       </div>
       <div class="trends">
-        <div class="trends-item" v-for="(tu,index) of trendsList" :key="tu.id" style="margin-bottom: 10px">
+        <div class="trends-item" v-for="tu of trendsList" :key="tu.id" style="margin-bottom: 10px">
           <n-card footer-style="padding-bottom:0px;" header-style="padding-bottom:5px;">
             <template #header>
               <div style="display: flex;align-items: center;">
@@ -85,7 +85,7 @@
                   <n-icon :component="ShareSocialOutline" color="gray" size="25"/>
                   <div style="margin-left: 5px"><span>分享</span></div>
                 </div>
-                <div class="trends-btn" @click="showComment(tu)">
+                <div class="trends-btn" @click="showComment(tu.id)">
                   <n-icon :component="ChatboxEllipsesOutline" color="gray" size="25"/>
                   <div style="margin-left: 5px"><span>评论</span></div>
                 </div>
@@ -94,12 +94,12 @@
                   <div style="margin-left: 5px"><span>喜欢</span></div>
                 </div>
               </div>
-              <div class="t-comment" v-show="tu.showCommentFlag" style="margin-bottom: 20px">
-                <TextInputer @pulishComment="publishMessage" :id="index"></TextInputer>
+              <div class="t-comment" v-show="commentShowFlag" style="margin-bottom: 20px">
+                <TextInputer @pulishComment="publishMessage" :id="tu.id"></TextInputer>
                 <div class="text-fu">
 
                 </div>
-                <n-card style="border:none;margin-bottom: 2px" class="sty-co" v-for="(co,index) of tu.comments" footer-style="padding-bottom:10px;" header-style="padding-bottom:8px;padding-top:8px;" content-style="padding-bottom:6px;">
+                <n-card style="border:none;margin-bottom: 2px" class="sty-co" v-for="co of commentResult.rows" :key="co.id" footer-style="padding-bottom:10px;" header-style="padding-bottom:8px;padding-top:8px;" content-style="padding-bottom:6px;">
                   <template #header>
                     <div style="display: flex;align-items: center;">
                       <n-avatar
@@ -107,7 +107,7 @@
                           size="small"
                           :src="co.avatar"
                       />
-                      <div style="margin-left: 10px"><span style="color: gray;font-size: 12px">{{ co.username }}</span></div>
+                      <div style="margin-left: 10px"><span style="color: gray;font-size: 12px">{{ co.author }}</span></div>
                     </div>
                   </template>
                   <template #default>
@@ -141,7 +141,7 @@
 
 <script lang="ts" setup>
 import MainFrame from "@/components/MainFrame.vue"
-import {MenuOption, NIcon, UploadCustomRequestOptions, UploadFileInfo, useDialog} from 'naive-ui'
+import {MenuOption, NIcon, UploadCustomRequestOptions, useDialog} from 'naive-ui'
 import {
   BookmarkOutline,
   ChatboxEllipsesOutline,
@@ -155,16 +155,33 @@ import {FireOutlined, PictureOutlined, SmileOutlined, StarOutlined} from '@ant-d
 import V3Emoji from 'vue3-emoji'
 import Clamp from '@/components/Clamp.vue'
 import TextInputer from '@/components/TextInputer.vue'
-import {publishTrends, PublishTrendsPO, queryTrends, Trends} from '@/api/trends'
+import {publishTrends, PublishTrendsPO, queryTrends, Trends,queryTrendsComment} from '@/api/trends'
 import {Page, PageInfo} from '@/api/api'
 import {upload} from "@/api/common";
 import _ from 'lodash'
+import {FileInfo} from "naive-ui/lib/upload/src/interface";
+import {Comment} from "@/api/comment";
 
 const reload = inject("reload");
 const dialog = useDialog();
-
-function showComment(tu) {
-  tu.showCommentFlag = !tu.showCommentFlag
+let commentResult = new Page()
+let commentShowFlag = ref(false)
+function showComment(id:string) {
+  if(commentShowFlag.value){
+    commentShowFlag.value = false
+  }else {
+    let pageInfo = new PageInfo();
+    pageInfo.orderBy = "t.create_time desc"
+    pageInfo.condition = {
+      "t.row_id":id,
+      "type":"T"
+    }
+    queryTrendsComment(pageInfo).then(res=>{
+      commentResult = res.data.data
+    })
+    console.log(commentResult)
+    commentShowFlag.value = true
+  }
 }
 let pageInfo = reactive<PageInfo>({
   pageNum: 1,
@@ -187,7 +204,7 @@ const trend = reactive<PublishTrendsPO>({
   pics:[]
 })
 
-const fileList = reactive<Array<UploadFileInfo>>([])
+const fileList = reactive<Array<FileInfo>>([])
 function addEmoji(e) {
   trend.content += e
 }
@@ -195,7 +212,7 @@ function addEmoji(e) {
 const  picUpload = ref((options: UploadCustomRequestOptions)=>{
   let file = options.file.file as File
   upload(file).then(res=>{
-    options.file.url = res.data.data
+    options.file.url = res.data?.data
     fileList.push(options.file)
   })
 })

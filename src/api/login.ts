@@ -3,17 +3,17 @@ import {AxiosResponse} from "axios";
 
 const api = group("/api/user")
 
-type User={
+class User{
     username:string
     passoword:string
 }
-type UserInfo={
-    rowId:string,
-    username:string,
-    gender:string,
-    avatar:string,
-    positionType:string,
-    ceateTime:string
+class UserInfo{
+    rowId:string
+    username:string
+    gender:string
+    avatar:string
+    positionType:string
+    createTime:string
 }
 
 async function userLogin(user:User):Promise<AxiosResponse<Result<UserInfo>>> {

@@ -21,20 +21,20 @@ function group(prefix:string):AxiosInstance{
     return app
 }
 
-export type PageInfo = {
-    pageSize:number,
-    pageNum:number,
+class PageInfo{
+    pageSize:number = 1
+    pageNum:number = 10
     orderBy:string
     condition:object
 }
-type Page<T> = {
-    pageSize:number,
-    pageNum:number,
-    total:number,
-    rows:Array<T>,
+class Page<T>{
+    pageSize:number
+    pageNum:number
+    total:number
+    rows:Array<T>
     lastPage:boolean
 }
-type Result<T> = {
+class Result<T> {
     msg:string
     code: number
     data:T

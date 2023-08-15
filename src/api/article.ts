@@ -1,20 +1,21 @@
 import {group,PageInfo,Page,Result} from "@/api/api";
 import {AxiosResponse} from "axios";
 import {RouteParamValue} from "vue-router";
+import {Comment} from "@/api/comment";
 const api = group("/api/article")
 
-type Article = {
-    articleId:number,
-    title:string,
-    authorId:number,
-    author:string,
-    content:string,
+class Article{
+    articleId:number
+    title:string
+    authorId:number
+    author:string
+    content:string
     desc:string
-    timeAgo:string,
-    coverUrl:string,
-    createTime:string,
-    supportCount:string,
-    scanCount:string,
+    timeAgo:string
+    coverUrl:string
+    createTime:string
+    supportCount:string
+    scanCount:string
     commentCount:string
 }
 
@@ -39,4 +40,10 @@ async function queryDetail(id: string | RouteParamValue[]):Promise<AxiosResponse
     return await api.post("/queryDetail/"+id);
 }
 
-export {addArticle,addSupport,queryRecommendArticles,Article,queryDetail}
+async function queryArticleComment(pageInfo: PageInfo): Promise<AxiosResponse<Result<Page<Comment>>>> {
+    return  await api.post("/queryArticleComment", pageInfo);
+}
+
+
+
+export {addArticle,addSupport,queryRecommendArticles,Article,queryDetail,queryArticleComment}
